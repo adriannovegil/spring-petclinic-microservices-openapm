@@ -5,8 +5,8 @@ services:
   # ============================================================================
   # Config server
   config-server:
-    image: sashimi/spring-petclinic-config-server
-    container_name: sashimi-config-server
+    image: openapm/spring-petclinic-config-server
+    container_name: openapm-config-server
     entrypoint: ["sh", "-c","
       java -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Djava.security.egd=file:/dev/./urandom
       -jar /app.jar"]
@@ -15,8 +15,8 @@ services:
 
   # Discovery service
   discovery-server:
-    image: sashimi/spring-petclinic-discovery-server
-    container_name: sashimi-discovery-server
+    image: openapm/spring-petclinic-discovery-server
+    container_name: openapm-discovery-server
     depends_on:
       - config-server
     entrypoint: ["sh", "-c","
@@ -30,8 +30,8 @@ services:
   # ============================================================================
   # Customers service
   customers-service:
-    image: sashimi/spring-petclinic-customers-service
-    container_name: sashimi-customers-service
+    image: openapm/spring-petclinic-customers-service
+    container_name: openapm-customers-service
     depends_on:
       - config-server
       - discovery-server
@@ -44,8 +44,8 @@ services:
 
   # Visits service
   visits-service:
-    image: sashimi/spring-petclinic-visits-service
-    container_name: sashimi-visits-service
+    image: openapm/spring-petclinic-visits-service
+    container_name: openapm-visits-service
     depends_on:
       - config-server
       - discovery-server
@@ -56,10 +56,10 @@ services:
     ports:
       - 8082:8082
 
-  #Vets service
+  # Vets service
   vets-service:
-    image: sashimi/spring-petclinic-vets-service
-    container_name: sashimi-vets-service
+    image: openapm/spring-petclinic-vets-service
+    container_name: openapm-vets-service
     depends_on:
       - config-server
       - discovery-server
@@ -72,8 +72,8 @@ services:
 
   # API gateway
   api-gateway:
-    image: sashimi/spring-petclinic-api-gateway
-    container_name: sashimi-api-gateway
+    image: openapm/spring-petclinic-api-gateway
+    container_name: openapm-api-gateway
     depends_on:
       - config-server
       - discovery-server
@@ -87,8 +87,8 @@ services:
   # Admin Server
   # ============================================================================
   admin-server:
-    image: sashimi/spring-petclinic-admin-server
-    container_name: sashimi-admin-server
+    image: openapm/spring-petclinic-admin-server
+    container_name: openapm-admin-server
     depends_on:
      - config-server
      - discovery-server
@@ -102,8 +102,8 @@ services:
   # Circuit breaker
   # ============================================================================
   hystrix-dashboard:
-    image: sashimi/spring-petclinic-hystrix-dashboard
-    container_name: sashimi-hystrix-dashboard
+    image: openapm/spring-petclinic-hystrix-dashboard
+    container_name: openapm-hystrix-dashboard
     depends_on:
      - config-server
      - discovery-server
@@ -114,13 +114,68 @@ services:
     ports:
      - 7979:7979
 
+  # Metrics
+  # ============================================================================
+  # Prometheus
+  prometheus-server:
+    build: ./docker/prometheus-server
+    image: openapm/spring-petclinic-prometheus
+    container_name: openapm-prometheus-server
+    ports:
+     - 9090:9090
+
+  # InfluxDB
+  influxdb-server:
+    build: ./docker/influxdb-server
+    image: openapm/spring-petclinic-influxdb
+    container_name: openapm-influxdb-server
+    ports:
+     - 8086:8086
+
+  # Telegraf
+  telegraf-server:
+    build: ./docker/telegraf-server
+    image: openapm/spring-petclinic-telegraf
+    container_name: openapm-telegraf-server
+    depends_on:
+     - influxdb-server
+
+  # Grafana
+  grafana-server:
+    build: ./docker/grafana-server
+    image: openapm/spring-petclinic-grafana
+    container_name: openapm-grafana-server
+    depends_on:
+     - prometheus-server
+    ports:
+     - 3002:3000
+    environment:
+     - GF_INSTALL_PLUGINS=https://github.com/openapm/grafana-flowmap/archive/master.zip;novatec-flowmap-panel
+
+  # Trazing
+  # ============================================================================
+  # Jaeger
+  jaeger-server:
+    image: jaegertracing/all-in-one:latest
+    container_name: openapm-jaeger-server
+    environment:
+     - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+    ports:
+     - 5775:5775/udp
+     - 6831:6831/udp
+     - 6832:6832/udp
+     - 5778:5778
+     - 16686:16686
+     - 14268:14268
+     - 9411:9411
+
   # Load
   # ============================================================================
   # Load server
   load-server:
     build: ./docker/load-server
-    image: sashimi/load-server
-    container_name: sashimi-load-server
+    image: openapm/load-server
+    container_name: openapm-load-server
     depends_on:
       - api-gateway
       - customers-service
