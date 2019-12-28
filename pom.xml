@@ -10,12 +10,13 @@
     </parent>
 
     <groupId>org.springframework.samples</groupId>
-    <artifactId>spring-petclinic-microservices-sashimi</artifactId>
+    <artifactId>spring-petclinic-microservices-openapm</artifactId>
     <version>2.1.4</version>
     <name>${project.artifactId}</name>
     <packaging>pom</packaging>
 
     <modules>
+        <module>spring-petclinic-opencensus-server</module>
         <module>spring-petclinic-admin-server</module>
         <module>spring-petclinic-api-gateway</module>
         <module>spring-petclinic-config-server</module>
@@ -35,7 +36,7 @@
 
         <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
 
-        <docker.image.prefix>sashimi</docker.image.prefix>
+        <docker.image.prefix>openapm</docker.image.prefix>
         <docker.image.exposed.port>9090</docker.image.exposed.port>
         <docker.image.dockerfile.dir>${basedir}</docker.image.dockerfile.dir>
         <docker.image.dockerize.version>v0.6.1</docker.image.dockerize.version>
@@ -53,6 +54,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            
+            <dependency>
+                <groupId>org.springframework.samples.petclinic.opencensus</groupId>                
+                <artifactId>spring-petclinic-opencensus-server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
@@ -65,6 +73,7 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            
             <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
