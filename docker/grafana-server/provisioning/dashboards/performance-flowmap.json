@@ -895,7 +895,7 @@
       ],
       "title": "Flowmap",
       "transparent": false,
-      "type": "novatec-flowmap-panel"
+      "type": "novatec-service-dependency-graph-panel"
     },
     {
       "columns": [],

@@ -12,6 +12,7 @@ services:
       -jar /app.jar"]
     ports:
       - 8888:8888
+      - 9096:9096
 
   # Discovery service
   discovery-server:
@@ -25,6 +26,7 @@ services:
       -jar /app.jar"]
     ports:
       - 8761:8761
+      - 9095:9095
 
   # Services
   # ============================================================================
@@ -154,7 +156,9 @@ services:
     ports:
      - 3000:3000
     environment:
-     - GF_INSTALL_PLUGINS=https://github.com/NovatecConsulting/novatec-service-dependency-graph-panel/archive/v0.3.zip;novatec-flowmap-panel
+     - GF_SECURITY_ADMIN_PASSWORD=demo
+     - GF_PATHS_PROVISIONING=/usr/share/grafana/custom/
+     - GF_INSTALL_PLUGINS=https://github.com/NovatecConsulting/novatec-service-dependency-graph-panel/releases/latest/download/novatec-service-dependency-graph-panel.zip;novatec-flowmap-panel
 
   # Trazing
   # ============================================================================

@@ -16,10 +16,12 @@ rule_files:
   # - "first_rules.yml"
   # - "second_rules.yml"
 
-# A scrape configuration containing exactly one endpoint to scrape:
-# Here it's Prometheus itself.
+  # A scrape configuration containing exactly one endpoint to scrape:
+  # Here it's Prometheus itself.
 scrape_configs:
-  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped 
+  # from this config.
+
 # - job_name: 'prometheus'
 #
     # metrics_path defaults to '/metrics'
@@ -29,35 +31,39 @@ scrape_configs:
 #
 #    static_configs:
 #    - targets: ['localhost:9090']
+
   - job_name: 'api-gateway'
-
     scrape_interval: 1m
-
     static_configs:
     - targets: ['api-gateway:9091']
-
     metrics_path: '/'
+    
   - job_name: 'customers-service'
-
     scrape_interval: 1m
-
     static_configs:
     - targets: ['customers-service:9092']
-
     metrics_path: '/'
+    
   - job_name: 'vets-service'
-
     scrape_interval: 1m
-
     static_configs:
     - targets: ['vets-service:9093']
-
     metrics_path: '/'
+    
   - job_name: 'visits-service'
-
     scrape_interval: 1m
-
     static_configs:
     - targets: ['visits-service:9094']
-
+    metrics_path: '/'
+    
+  - job_name: 'discovery-server'
+    scrape_interval: 1m
+    static_configs:
+    - targets: ['discovery-server:9095']
+    metrics_path: '/'
+    
+  - job_name: 'config-server'
+    scrape_interval: 1m
+    static_configs:
+    - targets: ['config-server:9096']
     metrics_path: '/'
