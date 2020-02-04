@@ -5,7 +5,7 @@ services:
   # ============================================================================
   # Config server
   config-server:
-    image: openapm/spring-petclinic-config-server
+    image: openapm/config-server
     container_name: openapm-config-server
     entrypoint: ["sh", "-c","
       java -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Djava.security.egd=file:/dev/./urandom
@@ -16,7 +16,7 @@ services:
 
   # Discovery service
   discovery-server:
-    image: openapm/spring-petclinic-discovery-server
+    image: openapm/discovery-server
     container_name: openapm-discovery-server
     depends_on:
       - config-server
@@ -93,7 +93,7 @@ services:
   # Admin Server
   # ============================================================================
   admin-server:
-    image: openapm/spring-petclinic-admin-server
+    image: openapm/admin-server
     container_name: openapm-admin-server
     depends_on:
      - config-server
@@ -108,7 +108,7 @@ services:
   # Circuit breaker
   # ============================================================================
   hystrix-dashboard:
-    image: openapm/spring-petclinic-hystrix-dashboard
+    image: openapm/hystrix-dashboard
     container_name: openapm-hystrix-dashboard
     depends_on:
      - config-server
@@ -125,7 +125,7 @@ services:
   # Prometheus
   prometheus-server:
     build: ./docker/prometheus-server
-    image: openapm/spring-petclinic-prometheus
+    image: openapm/prometheus-server
     container_name: openapm-prometheus-server
     ports:
      - 9090:9090
@@ -133,7 +133,7 @@ services:
   # InfluxDB
   influxdb-server:
     build: ./docker/influxdb-server
-    image: openapm/spring-petclinic-influxdb
+    image: openapm/influxdb-server
     container_name: openapm-influxdb-server
     ports:
      - 8086:8086
@@ -141,7 +141,7 @@ services:
   # Telegraf
   telegraf-server:
     build: ./docker/telegraf-server
-    image: openapm/spring-petclinic-telegraf
+    image: openapm/telegraf-server
     container_name: openapm-telegraf-server
     depends_on:
      - influxdb-server
@@ -149,7 +149,7 @@ services:
   # Grafana
   grafana-server:
     build: ./docker/grafana-server
-    image: openapm/spring-petclinic-grafana
+    image: openapm/grafana-server
     container_name: openapm-grafana-server
     depends_on:
      - prometheus-server
