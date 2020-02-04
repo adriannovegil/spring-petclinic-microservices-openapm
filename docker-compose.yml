@@ -5,7 +5,7 @@ services:
   # ============================================================================
   # Config server
   config-server:
-    image: openapm/config-server
+    image: openapm/spring-petclinic-config-server
     container_name: openapm-config-server
     entrypoint: ["sh", "-c","
       java -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Djava.security.egd=file:/dev/./urandom
@@ -16,7 +16,7 @@ services:
 
   # Discovery service
   discovery-server:
-    image: openapm/discovery-server
+    image: openapm/spring-petclinic-discovery-server
     container_name: openapm-discovery-server
     depends_on:
       - config-server
@@ -93,7 +93,7 @@ services:
   # Admin Server
   # ============================================================================
   admin-server:
-    image: openapm/admin-server
+    image: openapm/spring-petclinic-admin-server
     container_name: openapm-admin-server
     depends_on:
      - config-server
@@ -108,7 +108,7 @@ services:
   # Circuit breaker
   # ============================================================================
   hystrix-dashboard:
-    image: openapm/hystrix-dashboard
+    image: openapm/spring-petclinic-hystrix-dashboard
     container_name: openapm-hystrix-dashboard
     depends_on:
      - config-server
